@@ -1,6 +1,7 @@
 import { NumberValueElement, OnOffElement, XmlAttributeComponent, XmlComponent } from "@file/xml-components";
 
 import { Compatibility, ICompatibilityOptions } from "./compatibility";
+import { EndnoteProperties, FootnoteProperties, IEndnotePropertiesOptions } from "./endnote-properties";
 
 export class SettingsAttributes extends XmlAttributeComponent<{
     readonly wpc?: string;
@@ -154,6 +155,7 @@ export type ISettingsOptions = {
     readonly compatibility?: ICompatibilityOptions;
     readonly defaultTabStop?: number;
     readonly hyphenation?: IHyphenationOptions;
+    readonly endnoteProperties?: IEndnotePropertiesOptions;
 };
 
 export type IHyphenationOptions = {
@@ -234,6 +236,14 @@ export class Settings extends XmlComponent {
         // https://c-rex.net/samples/ooxml/e1/Part4/OOXML_P4_DOCX_doNotHyphenateCaps_topic_ID0EW4XX.html
         if (options.hyphenation?.doNotHyphenateCaps !== undefined) {
             this.root.push(new OnOffElement("w:doNotHyphenateCaps", options.hyphenation.doNotHyphenateCaps));
+        }
+
+        // Add footnote properties (required when using endnotes)
+        this.root.push(new FootnoteProperties());
+
+        // Add endnote properties if specified
+        if (options.endnoteProperties !== undefined) {
+            this.root.push(new EndnoteProperties(options.endnoteProperties));
         }
 
         this.root.push(

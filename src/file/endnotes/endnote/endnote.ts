@@ -29,7 +29,8 @@ export class Endnote extends XmlComponent {
         for (let i = 0; i < options.children.length; i++) {
             const child = options.children[i];
 
-            if (i === 0) {
+            // Only add endnote reference run to regular endnotes, not separators
+            if (i === 0 && options.type !== EndnoteType.SEPARATOR && options.type !== EndnoteType.CONTINUATION_SEPARATOR) {
                 child.addRunToFront(new EndnoteRefRun());
             }
 

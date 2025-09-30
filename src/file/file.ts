@@ -89,6 +89,9 @@ export class File {
                 consecutiveHyphenLimit: options.hyphenation?.consecutiveHyphenLimit,
                 doNotHyphenateCaps: options.hyphenation?.doNotHyphenateCaps,
             },
+            endnoteProperties: {
+                numberFormat: "decimal", // Default to decimal numbers instead of roman numerals
+            },
         });
 
         this.media = new Media();

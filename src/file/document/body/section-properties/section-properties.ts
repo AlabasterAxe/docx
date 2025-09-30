@@ -7,6 +7,7 @@ import { OnOffElement, XmlComponent } from "@file/xml-components";
 
 import { Columns, IColumnsAttributes } from "./properties/columns";
 import { IDocGridAttributesProperties, createDocumentGrid } from "./properties/doc-grid";
+import { ISectionEndnotePropertiesOptions, SectionEndnoteProperties } from "./properties/endnote-properties";
 import { HeaderFooterReference, HeaderFooterReferenceType, HeaderFooterType } from "./properties/header-footer-reference";
 import { ILineNumberAttributes, createLineNumberType } from "./properties/line-number";
 import { IPageBordersOptions, PageBorders } from "./properties/page-borders";
@@ -38,6 +39,7 @@ export type ISectionPropertiesOptions = {
     readonly verticalAlign?: SectionVerticalAlign;
     readonly column?: IColumnsAttributes;
     readonly type?: (typeof SectionType)[keyof typeof SectionType];
+    readonly endnoteProperties?: ISectionEndnotePropertiesOptions;
 };
 
 // <xsd:complexType name="CT_SectPr">
@@ -118,11 +120,17 @@ export class SectionProperties extends XmlComponent {
         verticalAlign,
         column,
         type,
+        endnoteProperties,
     }: ISectionPropertiesOptions = {}) {
         super("w:sectPr");
 
         this.addHeaderFooterGroup(HeaderFooterType.HEADER, headerWrapperGroup);
         this.addHeaderFooterGroup(HeaderFooterType.FOOTER, footerWrapperGroup);
+
+        // Add endnote properties early in the sequence according to XSD schema
+        if (endnoteProperties !== undefined) {
+            this.root.push(new SectionEndnoteProperties(endnoteProperties));
+        }
 
         if (type) {
             this.root.push(new Type(type));
