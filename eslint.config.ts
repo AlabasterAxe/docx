@@ -349,7 +349,6 @@ const config: Linter.Config<Linter.RulesRecord>[] = [
             parserOptions: {
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname,
-                project: ["tsconfig.json"],
             },
         },
         rules: {
